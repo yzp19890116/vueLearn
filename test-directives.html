@@ -1,0 +1,82 @@
+<!doctype html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <!-- 声明当前页面的三元素 -->
+    <title>自定义指令</title>
+    <meta name='keywords' content='关键词,关键词'>
+    <meta name='description' content=''>
+
+    <!-- js/css -->
+    <script src="./vue.js"></script>
+	<!-- lodash是js集Array/Object/String/Function的Util于一身。lodash打包了Array/Object/String/Function里一些Api，好处是连ES6的也打包了，所以让你想在ES5环境下使用诸如 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+</head>
+
+<div id="root">
+	<!--全局和局部同事存在的时候，现象是局部组件的高亮了。理解为是先全局生效后组件生效。所以后生效的高亮了-->
+    <input v-focus>
+	<input v-another-focus>
+
+	<!--钩子函数参数-->
+	<div v-demo:foo.a.b="message">123</div>
+	<div id="hook-arguments-example" v-demo:foo.a.b="message"></div>
+</div>
+<script>
+
+	//注册一个全局自定义指令
+	Vue.directive('focus',{
+		//当被绑定元素插入到DOM中时
+		inserted: function(el){
+			el.focus();
+		}
+	});
+
+	Vue.directive('demo', {
+		bind: function (el, binding, vnode) {
+			var s = JSON.stringify
+			el.innerHTML =
+					'name: '       + s(binding.name) + '<br>' +
+					'value: '      + s(binding.value) + '<br>' +
+					'expression: ' + s(binding.expression) + '<br>' +
+					'argument: '   + s(binding.arg) + '<br>' +
+					'modifiers: '  + s(binding.modifiers) + '<br>' +
+					'vnode keys: ' + Object.keys(vnode).join(', ')
+		}
+	})
+
+    var vm = new Vue({
+        el: "#root",		//让uve接管页面的哪个元素
+        data: {
+			message: "hello!"
+        },
+		components: {
+
+		},
+        methods: {
+
+        },
+        computed: {
+
+        },
+        watch:{
+
+        },
+		directives: {
+        	anotherFocus:{
+				//当被绑定元素插入到DOM中时
+				inserted: function(el){
+					el.focus();
+				}
+			}
+		}
+    })
+</script>
+
+<style>
+
+</style>
+
+</body>
+</html>

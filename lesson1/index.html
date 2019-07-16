@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>第一课</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Name: {{ name }}</h1>
+        <p>Job: {{ job }}</p>
+        <h1>{{ greet('zhangsan') }}</h1>
+        <a v-bind:href="webSite">web开发</a>
+        <input type="text" v-bind:value="job" />
+        <p v-html="webSiteTag"></p>
+    </div>
+    {{ name }}
+    <script src="app.js"></script>
+</body>
+</html>

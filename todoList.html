@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <!-- 声明当前页面的三元素 -->
+        <title>helloWorld--zxk</title>
+        <meta name='keywords' content='关键词,关键词'>
+        <meta name='description' content=''>
+
+        <!-- js/css -->
+		<script src="./vue.js"></script>
+    </head>
+<body>
+
+<div id="root">
+	<!--代办添加-->
+	<div>
+		<input v-model="content"/>
+		<!-- <div>{{content}}</div> -->
+		<button @click="handleClick">提交</button>
+	</div>
+	
+	<!--代办展示-->
+	<!-- delete监听子组件事件，调用父组件方法 -->
+	<ul>
+		<todo-item 
+			v-for="(item, index) of list" 
+			:key="index"
+			:content="item"
+			:index= "index"
+			@delete= "handleDelete"
+		>
+		</todo-item>
+	</ul>
+</div>
+
+
+<script>
+	//组件拆分，此处用法是全局组件,每一个组件都可以看做是一个Vue实例
+	Vue.component('todo-item',{
+		props: ['content','index'],
+		template: '<li @click="handleClick">{{content}}</li>',
+		methods: {
+			handleClick: function(){
+				this.$emit('delete', this.index);//通知父组件
+			}
+		}
+	});
+	
+	//局部组件
+	//var todoItem = {
+	//	template: '<li>item</li>'
+	//}
+	
+	new Vue({
+		el: "#root",		//让uve接管页面的哪个元素
+		//局部组件注册
+		//components: {
+		//	'todo-item': todoItem
+		//},
+		data: {
+			content: "",
+			count: 0,
+			show: true,
+			list: []
+		},
+		//局部组件
+		methods: {
+			handleClick: function(){
+				this.list.push(this.content);
+				this.content = '';
+			},
+			changeShow: function(){
+				this.show = !this.show;
+			},
+			handleDelete: function(index){
+				this.list.splice(index, 1);
+			}
+		}
+	})
+</script>
+
+ </body>
+</html>

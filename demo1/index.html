@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第一个示例</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 图片展示 -->
+        <div id="bag" :class="{burst: ended}"></div>
+
+        <!-- 进度情况 -->
+        <div id="bag-health">
+            <div :style="{width: health+ '%'}"></div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div id="controls">
+            <button v-show="!ended" @click="punch">使劲敲</button>
+            <button @click="restart">重新开始</button>
+        </div>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

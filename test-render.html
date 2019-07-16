@@ -1,0 +1,103 @@
+<!doctype html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <!-- 声明当前页面的三元素 -->
+    <title>渲染函数</title>
+    <meta name='keywords' content='关键词,关键词'>
+    <meta name='description' content=''>
+
+    <!-- js/css -->
+    <script src="./vue.js"></script>
+	<!-- lodash是js集Array/Object/String/Function的Util于一身。lodash打包了Array/Object/String/Function里一些Api，好处是连ES6的也打包了，所以让你想在ES5环境下使用诸如 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+</head>
+
+<div id="root">
+    <anchored-heading :level="1">
+        <!--此处就没有必要加a标签了-->
+        <a name="hello-world" href="#hello-world">
+            Hello world!
+        </a>
+    </anchored-heading>
+    <anchored-heading :level="2">
+        <a name="hello-world1" href="#hello-world2">
+            Hello world3!
+        </a>
+    </anchored-heading>
+    <anchored-heading :level="3">hello word</anchored-heading>
+    <anchored-heading :level="1">hello word</anchored-heading>
+    <anchored-heading :level="2">hello word</anchored-heading>
+    <anchored-heading :level="3">hello word</anchored-heading>
+    <anchored-heading :level="1">hello word</anchored-heading>
+    <anchored-heading :level="2">hello word</anchored-heading>
+    <anchored-heading :level="3">hello word</anchored-heading>
+</div>
+<script>
+
+    var getChildrenTextContent = function(children){
+        return children.map(function(node){
+            return node.children ? getChildrenTextContent(node.children) : node.text
+        }).join('')
+    }
+
+    Vue.component('anchored-heading',{
+        render: function(createElement){
+            // //创建 kebab-case 风格id
+            // headingId = getChildrenTextContent(this.$slots.default).toLowerCase().replace('/\W+/g','-').replace('/(^-|-$)/g', '')
+            //
+            // return createElement(
+            //     'h' + this.level,   //标签名称
+            //     [
+            //         createElement('a', {
+            //             attrs: {
+            //                 name: headingId,
+            //                 href: '#' + headingId
+            //             }
+            //         },this.$slots.default)
+            //     ]
+            // )
+
+            //VNode必须唯一如果想重复创建多个元素，可以用工厂函数实现
+            return createElement('div', Array.apply(null, {length: 20}).map(function(){
+                return createElement('p','hi')
+            }))
+        },
+        props: {
+            level: {
+                type: Number,
+                request: true
+            }
+        }
+    })
+
+    var vm = new Vue({
+        el: "#root",		//让uve接管页面的哪个元素
+        data: {
+			message: "hello!"
+        },
+		components: {
+
+		},
+        methods: {
+
+        },
+        computed: {
+
+        },
+        watch:{
+
+        },
+		directives: {
+
+		}
+    })
+</script>
+
+<style>
+
+</style>
+
+</body>
+</html>

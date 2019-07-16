@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <!-- 声明当前页面的三元素 -->
+    <title>自定义指令</title>
+    <meta name='keywords' content='关键词,关键词'>
+    <meta name='description' content=''>
+
+    <!-- js/css -->
+    <script src="./vue.js"></script>
+	<!-- lodash是js集Array/Object/String/Function的Util于一身。lodash打包了Array/Object/String/Function里一些Api，好处是连ES6的也打包了，所以让你想在ES5环境下使用诸如 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+</head>
+
+<div id="root">
+	
+<script>
+    import Vue from 'vue'
+	import Vuex from 'vuex'
+
+    Vue.use(Vuex);
+    
+    const store = new Vuex.Store({
+        state: {
+            count: 0
+        },
+        mutations: {
+            increment (state) {
+                state.count++ 
+            }
+        }
+    })
+
+    var vm = new Vue({
+        el: "#root",		//让uve接管页面的哪个元素
+        data: {
+			message: "hello!"
+        },
+		components: {
+
+		},
+        methods: {
+
+        },
+        computed: {
+
+        },
+        watch:{
+
+        },
+		directives: {
+        	anotherFocus:{
+				//当被绑定元素插入到DOM中时
+				inserted: function(el){
+					el.focus();
+				}
+			}
+		},
+        created: {
+            console.log(store.state.count)
+            store.commit('increment')
+            console.log(store.state.count)
+        }
+    })
+</script>
+
+<style>
+
+</style>
+
+</body>
+</html>

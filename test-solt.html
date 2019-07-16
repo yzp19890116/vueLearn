@@ -1,0 +1,127 @@
+<!doctype html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <!-- 声明当前页面的三元素 -->
+    <title>helloWorld--zxk</title>
+    <meta name='keywords' content='关键词,关键词'>
+    <meta name='description' content=''>
+
+    <!-- js/css -->
+    <script src="./vue.js"></script>
+</head>
+<body>
+
+<div id="root">
+    <!-- 一条规则要记住：父级模板里的所有内容都是在父级作用域中编译的；子模板里的所有内容都是在子作用域中编译的。 -->
+<!--    <navigation-link url="/profile" :content="111111111111">-->
+<!--        <span>test</span>-->
+<!--        My profile-->
+<!--        Clicking here will send you to: {{ url }}{{content}}-->
+<!--    </navigation-link>-->
+
+    <!-- 后背内容：插槽的后背内容，如果没有内容的时候使用后背内容，如果有值则替换后背内容 -->
+    <submit-button></submit-button>
+    <submit-button>保存</submit-button>
+
+    <!-- 具名插槽 -->
+    <base-layout>
+        <template v-slot:header>
+            header
+        </template>
+        <!--下面两种写法都可以，但是如果都写，只认识标准写法-->
+        <template v-slot:default>
+            main body
+        </template>
+        <p>another main body</p>
+        <template v-slot:footer>
+            footer
+        </template>
+    </base-layout>
+
+    <!--作用域插槽-->
+    <current-user>
+        <!-- {{user.lastName}}  此写法获取不到-->
+        <template v-slot:default="slotProps">
+            {{slotProps.user.firstName}}
+        </template>
+    </current-user>
+
+    <!--独占默认插槽的缩写语法  注意默认插槽的缩写语法不能和具名插槽混用，因为它会导致作用域不明确-->
+    <current-user v-slot:default="slotProps">
+        {{slotProps.user.firstName}}
+    </current-user>
+    <!--再简写-->
+    <current-user v-slot="slotProps">
+        {{slotProps.user.firstName}}
+    </current-user>
+    <!--解构作用域插槽：作用域插槽的内部工作原理是将你的插槽内容包括在一个传入单个参数的函数里-->
+    <current-user v-slot="{ user }">
+        {{user.firstName}}
+    </current-user>
+    <current-user v-slot="{user: person}">
+        {{person.firstName}}
+    </current-user>
+    <current-user v-slot="user= {fullName: 'zhang1'}"><!--这个貌似有点不好用-->
+        {{user.fullName}}111
+    </current-user>
+
+    <!--动态插槽名  插槽名可以使用动态指令参数，等看到动态指令在说吧-->
+</div>
+
+<script>
+    // Vue.component('navigation-link',{
+    //     props: ['content'],
+    //     template: "<a class='nav-link'>url:{{ url }},testContent:{{content}} <slot></slot>.123</a>"
+    // })
+
+    Vue.component('submit-button',{
+        props: [],
+        template: "<button type='submit'><slot>submit</slot></button>"
+    })
+
+    Vue.component('base-layout',{
+        props: [],
+        template: "<div class='container'>" +
+                    "<header><slot name='header'></slot></header>" +
+                    "<main><slot></slot></main>" +
+                    "<footer><slot name='footer'></slot></footer>" +
+                  "</div>"
+    })
+
+    Vue.component('current-user', {
+        data: function(){
+            return{
+                user: {
+                    firstName: 'zhang',
+                    lastName: 'san'
+                },
+                user1: {
+
+                }
+            }
+        },
+        template: "<span><slot v-bind:user='user'>{{user.lastName}}</slot></span>"
+    })
+
+    var vm = new Vue({
+        el: "#root",		//让uve接管页面的哪个元素
+        data: {
+            testUrl: 'test...'
+        },
+        methods: {
+
+        },
+        computed: {
+
+        },
+        watch:{
+
+        }
+    })
+
+</script>
+
+</body>
+</html>

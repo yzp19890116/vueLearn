@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <!-- 声明当前页面的三元素 -->
+        <title>helloWorld--zxk</title>
+        <meta name='keywords' content='关键词,关键词'>
+        <meta name='description' content=''>
+
+        <!-- js/css -->
+		<script src="./vue.js"></script>
+    </head>
+<body>
+
+<div id="root">
+	<!-- 内容展示 -->
+	<h2>{{msg}}</h2>
+	<div>{{number}}</div>
+	<div v-text="content"></div>
+	<div v-html="content"></div>
+	
+	<!-- 设置点击事件 -->
+	<div v-on:click="handleClick">{{content}}</div>
+	<div @click="handleClick">{{content}}</div>
+	
+	<!-- 绑定title -->
+	<div v-bind:title="title">title</div>
+	<div :title="'test show:'+title">title</div>
+	
+	<!-- 双向绑定 -->
+	<input v-model="content" />
+	<div>{{content}}</div>
+	
+	<!-- 计算属性和侦听器 -->
+	<input v-model="firstName"/>
+	<input v-model="lastName"/>
+	<div>{{firstName}}{{lastName}}</div>
+	<div>{{fullName}}</div>
+	<div>{{count}}</div>
+	
+	<!-- if show foreach -->
+	<div v-if="show">hello word</div><!--不展示的时候直接删除dom-->
+	<div v-show="show">hello word</div><!--不展示的时候只是隐藏，添加display:none;属性-->
+	<button @click="changeShow">toggle</button>
+	<!-- 使用v-for时候添加key会提高性能,但是key是不能重复的, index在使用的时候会有问题，注意使用 -->
+	<ul>
+		<li v-for="(item, index) of list" :key="item">{{item}}</li>
+	</ul>
+	
+	<!-- 绑定HTML Class -->
+	<!-- 对象语法 -->
+	<div class="test" :class="{'active': isActive, 'text-danger': hasError}" >绑定HTML Class:对象语法</div>
+	<!-- 数组语法 -->
+	<div class="test" :class="[activeClass,errorClass]" >绑定HTML Class:数组语法</div>
+	<div class="test" :class="[{active: isActive},{'text-danger': hasError}]" >绑定HTML Class:三元表达式</div><!-- 三元表达式 -->
+	
+	<!-- 绑定内联样式 -->
+	<div :style="{color: activeColor, fontSize: fontSize + 'px'}">绑定内联样式:对象语法</div>
+	<div :style="styleObject">绑定内联样式:对象语法</div>
+	<div :style="{ display: ['-webkit-box', 'flex', '-ms-flexbox'] }">多重值</div>
+
+	
+</div>
+
+<script>
+
+	new Vue({
+		el: "#root",		//让uve接管页面的哪个元素
+		//template: "<h1>{{msg}}</h1>",//模板，会覆盖挂载点中的内容
+		data: {
+			msg: "hello word",
+			number: 123,
+			content: "<h1>test</h1>",
+			title: "this is a title",
+			firstName: "",
+			lastName: "",
+			count: 0,
+			show: true,
+			list: [1 , 1, 3],
+			isActive: true,
+			hasError: false,
+			activeClass: 'active',
+			errorClass: 'text-danger',
+			activeColor: 'red',
+			fontSize: 30,
+			styleObject: {
+				color: 'red',
+				fontSize: '13px'
+			  }
+
+		},
+		methods: {
+			handleClick: function(){
+				this.content = "word";
+			},
+			changeShow: function(){
+				this.show = !this.show;
+			}
+		},
+		computed: {
+			fullName: function(){
+				return this.firstName + this.lastName;
+			}
+		},
+		watch:{
+			firstName: function(){
+				this.count++;
+			},
+			lastName: function(){
+				this.count++;
+			},
+			fullName: function(){
+				this.count++;
+			}
+		}
+	})
+</script>
+
+ </body>
+</html>

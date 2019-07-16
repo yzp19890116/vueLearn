@@ -1,0 +1,137 @@
+<!doctype html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- 声明当前页面的编码集：charset=gbk,gb2312(中文编码) , utf-8(国际编码) -->
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <!-- 声明当前页面的三元素 -->
+    <title>过渡</title>
+    <meta name='keywords' content='关键词,关键词'>
+    <meta name='description' content=''>
+
+    <!-- js/css -->
+    <script src="./vue.js"></script>
+	<!-- lodash是js集Array/Object/String/Function的Util于一身。lodash打包了Array/Object/String/Function里一些Api，好处是连ES6的也打包了，所以让你想在ES5环境下使用诸如 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+</head>
+
+<div id="root">
+    <button v-on:click="show = !show">Toggle</button>	
+	
+	<transition name="slide-fade">
+		<p v-if="show">hello</p>
+	</transition>
+	<!-- 
+		当插入或删除包含在 transition 组件中的元素时，Vue 将会做以下处理：
+
+			自动嗅探目标元素是否应用了 CSS 过渡或动画，如果是，在恰当的时机添加/删除 CSS 类名。
+
+			如果过渡组件提供了 JavaScript 钩子函数，这些钩子函数将在恰当的时机被调用。
+
+			如果没有找到 JavaScript 钩子并且也没有检测到 CSS 过渡/动画，DOM 操作 (插入/删除) 在下一帧中立即执行。(注意：此指浏览器逐帧动画机制，和 Vue 的 nextTick 概念不同)
+	-->
+
+
+	<!-- 多个组件的过渡 -->
+	<input type="radio" value='v-a' name="opt" v-model='view'>
+	<input type="radio" value='v-b' name="opt" v-model='view'>
+	<transition name='component-fade' mode='out-in'>
+		<component v-bind:is='view'></component>
+	</transition>
+
+	<!-- 列表过渡 -->
+	<button v-on:click="add">Add</button>
+	<button v-on:click="remove">Remove</button>
+	<transition-group name="list" tag="p">
+		<span v-for="item of items" v-bind:key="item" class="list-item">{{item}}</span>
+	</transition-group>
+
+	<button v-on:click="shuffle">Shuffle</button>
+	<transition-group name="flip-list" tag="ul">
+		<li v-for="item of items" v-bind:key="item">{{item}}</li>
+	</transition-group>
+</div>
+<script>
+    var vm = new Vue({
+        el: "#root",		//让uve接管页面的哪个元素
+        data: {
+            show: true,
+			items: [1,2,3,4,5],
+			view: 'v-a',
+			nextNum: 6
+        },
+		components: {
+			'v-a': {
+				template: '<div>Component A</div>'
+			},
+			'v-b': {
+				template: '<div>Component B</div>'
+			}
+		},
+        methods: {
+			handleClick: function(val){
+				console.info(val)
+			},
+			randomIndex: function(){
+				return Math.floor(Math.random() * this.items.length)
+			},
+			add: function(){
+				this.items.splice(this.randomIndex(), 0 , this.nextNum++)
+			},
+			remove: function(){
+				this.items.splice(this.randomIndex(), 1);
+			},
+			shuffle: function(){
+				this.items = _.shuffle(this.items)
+			}
+        },
+        computed: {
+
+        },
+        watch:{
+
+        }
+    })
+</script>
+
+<style>
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+	transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to
+	/* .component-fade-leave-active for below version 2.1.8 */ {
+	opacity: 0;
+}
+.list-item {
+	display: inline-block;
+	margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+	transition: all 1s;
+}
+.list-enter, .list-leave-to
+	/* .list-leave-active for below version 2.1.8 */ {
+	opacity: 0;
+	transform: translateY(30px);
+}
+.flip-list-move {
+	transition: transform 1s;
+}
+
+</style>
+
+</body>
+</html>
